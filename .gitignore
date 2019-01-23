@@ -102,3 +102,12 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# PyCharm project settings
+.idea/
+
+# emacs
+*~
+
+# os x
+.DS_Store
