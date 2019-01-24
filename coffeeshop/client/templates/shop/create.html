@@ -1,0 +1,28 @@
+{% extends "_base.html" %}
+{% block content %}
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+<script>
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    }
+  }
+
+  function showPosition(position) {
+    var latitude = document.getElementById("latitude");
+    var longitude = document.getElementById("latitude");
+    latitude.value = position.coords.latitude;
+    longitude.value = position.coords.longitude;
+  }
+</script>
+<h1>{{ _('Add Coffee Shop') }}</h1>
+<form action="{{ url_for('coffee.add_shop') }}" method="POST" name="add_shop_form" id="add_shop_form" enctype="multipart/form-data" onload="getLocation()">
+  {{ form.hidden_tag() }}
+  {{ render_field_with_errors(form.name) }}
+  {{ render_field_with_errors(form.address) }}
+  {{ render_field_with_errors(form.url) }}
+  {{ render_field_with_errors(form.photo) }}
+  {{ render_field(form.submit) }}
+</form>
+
+{% endblock %}

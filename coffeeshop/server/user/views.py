@@ -2,7 +2,7 @@
 
 
 from flask import render_template, Blueprint, url_for, redirect, flash, request
-from flask_security import login_user, logout_user, login_required
+from flask_security import login_required
 
 from coffeeshop.server import bcrypt, db
 from coffeeshop.server.models import User

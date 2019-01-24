@@ -18,9 +18,12 @@ class Shop(db.Model):
     url = db.Column(URLType)
     photo = db.Column(db.String)  # store the URL location of uploaded photos, or perhaps just the filename.
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     user = db.relationship(User, backref=db.backref('shops'))
+
+    def __repr__(self):
+        return f'<Shop name={self.name} address={self.address} location={self.location} url={self.url} photo={self.photo} user={self.user_id}>'
 
 
 class Review(db.Model):
@@ -35,8 +38,8 @@ class Review(db.Model):
     rating = db.Column(ChoiceType(SCORES, impl=db.Integer), nullable=False)
     comment = db.Column(db.String)
 
-    shop_id = db.Column(db.Integer, db.ForeignKey('shop.id'))
+    shop_id = db.Column(db.Integer, db.ForeignKey('shop.id'), nullable=False)
     shop = db.relationship(Shop, backref=db.backref('reviews'))
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship(User, backref=db.backref('reviews'))

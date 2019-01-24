@@ -44,11 +44,11 @@ def create_app(script_info=None):
     # register blueprints
     from coffeeshop.server.user.views import user_blueprint
     from coffeeshop.server.main.views import main_blueprint
-    from coffeeshop.server.shop.views import shop_blueprint
+    from coffeeshop.server.shop.views import coffee_blueprint
 
     app.register_blueprint(user_blueprint)
     app.register_blueprint(main_blueprint)
-    app.register_blueprint(shop_blueprint)
+    app.register_blueprint(coffee_blueprint)
 
     # flask security
     from coffeeshop.server.models import User, Role

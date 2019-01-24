@@ -10,7 +10,7 @@ class BaseConfig(object):
 
     # Flask settings
     APP_NAME = env("APP_NAME", "CoffeeShop")
-    FLASK_ENV = env("APP_NAME", "development")
+    FLASK_ENV = env("FLASK_ENV", "development")
     SECRET_KEY = env("SECRET_KEY", "pythoncharmers")
 
     # database
@@ -25,8 +25,14 @@ class BaseConfig(object):
     SECURITY_REGISTERABLE = env("SECURITY_REGISTERABLE")
     SECURITY_SEND_REGISTER_EMAIL = env("SECURITY_SEND_REGISTER_EMAIL")
 
+    # s3 file upload
+    S3_BUCKET = env('S3_BUCKET')
+    S3_KEY_BASE = env('S3_KEY_BASE')
+    S3_LOCATION = env('S3_LOCATION')
+
     # other
     WTF_CSRF_ENABLED = False
+    MAX_CONTENT_LENGTH = env.int('MAX_CONTENT_LENGTH', 4194304)
 
 class DevelopmentConfig(BaseConfig):
     """Development configuration."""
