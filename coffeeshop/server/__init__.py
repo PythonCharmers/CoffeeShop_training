@@ -77,4 +77,10 @@ def create_app(script_info=None):
     def ctx():
         return {"app": app, "db": db}
 
+    # GNU Terry Pratchett
+    @app.after_request
+    def gnu_terry_pratchett(resp):
+        resp.headers.add("X-Clacks-Overhead", "GNU Terry Pratchett")
+        return resp
+
     return app
