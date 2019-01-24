@@ -52,8 +52,13 @@ def create_app(script_info=None):
 
     # flask security
     from coffeeshop.server.models import User, Role
+    from coffeeshop.server.user.forms import ExtendedRegisterForm
     datastore = SQLAlchemyUserDatastore(db, User, Role)
-    security_ctx = security.init_app(app, datastore)
+    security_ctx = security.init_app(
+        app,
+        datastore,
+        register_form=ExtendedRegisterForm  # extend the register
+    )
 
     # error handlers
     @app.errorhandler(401)
