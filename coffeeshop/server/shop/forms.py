@@ -52,3 +52,8 @@ class ReviewForm(FlaskForm):
     shop_id = HiddenField('shop_id')
 
     submit = SubmitField()
+
+
+class SearchForm(FlaskForm):
+    q = StringField('Find a coffee shop', validators=[DataRequired()])
+    submit = SubmitField()

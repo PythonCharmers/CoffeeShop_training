@@ -1,0 +1,21 @@
+{% extends "_base.html" %}
+{% block content %}
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+<h1>{{ _('Search') }}</h1>
+<form action="{{ url_for('coffee.search_shop') }}" method="GET" name="search_form" id="search_form">
+  {{ form.hidden_tag() }}
+  {{ render_field_with_errors(form.q) }}
+  {{ render_field(form.submit) }}
+</form>
+{% if shops %}
+  <h2>Results</h2>
+  <ol>
+  {% for shop in shops %}
+  <li>
+    <a href="{{ url_for( 'coffee.shops', id=shop.id) }}">{{ shop.name }}</a>
+    {% if shop.address %}<br />{{ shop.address }}{% endif %}
+  </li>
+  {% endfor %}
+  </ol>
+{% endif %}
+{% endblock %}
