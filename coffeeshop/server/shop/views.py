@@ -14,13 +14,10 @@ from .models import Shop, Review
 coffee_blueprint = Blueprint("coffee", __name__)
 
 
-# http://zabana.me/notes/upload-files-amazon-s3-flask.html
-
-
 @coffee_blueprint.route('/shop/<int:id>')
 def shops(id):
-    shop = Shop.query.get(1)
-    return str(id)
+    shop = Shop.query.get(id)
+    return render_template('shop/shop_details.html', shop=shop)
 
 
 @coffee_blueprint.route('/shop/add', methods=['GET', 'POST'])

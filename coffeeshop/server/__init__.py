@@ -60,6 +60,10 @@ def create_app(script_info=None):
         register_form=ExtendedRegisterForm  # extend the register
     )
 
+    # jinja2 filters
+    from .filters import env_override
+    app.jinja_env.filters['env_override'] = env_override
+
     # error handlers
     @app.errorhandler(401)
     def unauthorized_page(error):

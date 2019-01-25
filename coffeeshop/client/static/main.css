@@ -3,3 +3,8 @@
 .site-content {
   padding-top: 6rem;
 }
+
+img.photo {
+  image-orientation: from-image;
+  max-width: 80%;
+}
