@@ -35,11 +35,14 @@ class Review(db.Model):
     ]
 
     id = db.Column(db.Integer, primary_key=True)
-    rating = db.Column(ChoiceType(SCORES, impl=db.Integer), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
     comment = db.Column(db.String)
 
     shop_id = db.Column(db.Integer, db.ForeignKey('shop.id'), nullable=False)
-    shop = db.relationship(Shop, backref=db.backref('reviews'))
+    shop = db.relationship(Shop, backref=db.backref('reviews', lazy='joined'))
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship(User, backref=db.backref('reviews'))
+    user = db.relationship(User, backref=db.backref('reviews'), lazy='joined')
+
+    def __repr__(self):
+        return f'<Review rating={self.rating} shop={self.shop_id} user={self.user_id}>'

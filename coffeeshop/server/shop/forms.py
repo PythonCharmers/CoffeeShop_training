@@ -3,7 +3,7 @@ Forms for adding shops and reviews
 """
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, HiddenField, SubmitField
+from wtforms import StringField, HiddenField, SubmitField, RadioField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, URL
 from flask_uploads import UploadSet, IMAGES
 from flask_wtf.file import FileField, FileAllowed, FileRequired
@@ -37,3 +37,18 @@ class ShopForm(FlaskForm):
 
     submit = SubmitField()
 
+
+class ReviewForm(FlaskForm):
+    rating = RadioField(
+        label='How was the coffee?',
+        validators=[DataRequired()],
+        choices=[
+            (1, '👍'),
+            (2, '👎')
+        ],
+        coerce=int
+    )
+    comment = StringField(label='Comment')
+    shop_id = HiddenField('shop_id')
+
+    submit = SubmitField()
