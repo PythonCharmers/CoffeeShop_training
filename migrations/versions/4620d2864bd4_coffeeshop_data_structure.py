@@ -1,19 +1,18 @@
-"""One big hit of tables
+"""Coffeeshop data structure
 
-Revision ID: 867a8d96005a
-Revises: 29d212dea594
-Create Date: 2019-01-25 13:47:17.184488
+Revision ID: 4620d2864bd4
+Revises: 
+Create Date: 2019-01-25 15:53:38.778526
 
 """
 from alembic import op
 import sqlalchemy as sa
-import geoalchemy2
 import sqlalchemy_utils
 
 
 # revision identifiers, used by Alembic.
-revision = '867a8d96005a'
-down_revision = '29d212dea594'
+revision = '4620d2864bd4'
+down_revision = None
 branch_labels = None
 depends_on = None
 
@@ -54,9 +53,11 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('address', sa.String(), nullable=True),
-    sa.Column('location', geoalchemy2.types.Geography(geometry_type='POINT', srid=4326), nullable=True),
+    sa.Column('latitude', sa.Float(), nullable=True),
+    sa.Column('longitude', sa.Float(), nullable=True),
     sa.Column('url', sqlalchemy_utils.types.url.URLType(), nullable=True),
     sa.Column('photo', sa.String(), nullable=True),
+    sa.Column('date_added', sa.DateTime(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -66,6 +67,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('rating', sa.Integer(), nullable=False),
     sa.Column('comment', sa.String(), nullable=True),
+    sa.Column('date_added', sa.DateTime(), nullable=True),
     sa.Column('shop_id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['shop_id'], ['shop.id'], ),

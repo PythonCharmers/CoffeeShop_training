@@ -108,17 +108,21 @@ def add_shop():
         longitude = form.longitude.data
         current_app.logger.debug(f'{latitude} {longitude}')
 
-        geom = None
-        if latitude and longitude:
-            geom = f'POINT ({longitude} {latitude})'
-
         photo = None
         f = form.photo.data
         if f:
             f.filename = secure_filename(f.filename)
             photo = upload_file_to_s3(f)
 
-        shop = Shop(name=shop_name, address=address, url=url, photo=photo, location=geom, user=current_user)
+        shop = Shop(
+            name=shop_name,
+            address=address,
+            url=url,
+            photo=photo,
+            latitude=float(latitude),
+            longitude=float(longitude),
+            user=current_user
+        )
         db.session.add(shop)
         db.session.commit()
         current_app.logger.info(f'Created new {shop}')

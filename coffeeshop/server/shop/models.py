@@ -1,8 +1,7 @@
 # project/server/models.py
 from datetime import datetime
 
-from geoalchemy2 import Geography
-from sqlalchemy_utils import URLType, ChoiceType
+from sqlalchemy_utils import URLType
 
 from coffeeshop.server import db
 from ..models import User
@@ -14,9 +13,8 @@ class Shop(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, index=True)
     address = db.Column(db.String)
-    location = db.Column(Geography(
-        geometry_type='POINT', srid=4326, spatial_index=True
-    ))
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
     url = db.Column(URLType)
     photo = db.Column(db.String)  # store the URL location of uploaded photos, or perhaps just the filename.
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
@@ -25,7 +23,7 @@ class Shop(db.Model):
     user = db.relationship(User, backref=db.backref('shops'))
 
     def __repr__(self):
-        return f'<Shop name={self.name} address={self.address} location={self.location} url={self.url} photo={self.photo} user={self.user_id}>'
+        return f'<Shop name={self.name} address={self.address} location=POINT ({self.longitude} {self.latitude}) url={self.url} photo={self.photo} user={self.user_id}>'
 
 
 class Review(db.Model):
