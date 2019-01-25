@@ -127,7 +127,7 @@ def add_shop():
         db.session.commit()
         current_app.logger.info(f'Created new {shop}')
 
-        return redirect(f'/shop/{shop.id}')
+        return redirect(url_for('coffee.shops', id=shop.id))
     return render_template('shop/create.html', form=form)
 
 
@@ -151,7 +151,7 @@ def add_review():
         db.session.commit()
         current_app.logger.info(f'Created new {review}')
 
-        return redirect(f'/shop/{shop.id}')
+        return redirect(url_for('coffee.shops', id=shop.id))
 
     try:
         shop_id = request.args['shop_id']

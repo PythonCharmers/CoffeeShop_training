@@ -16,10 +16,10 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('coffee.add_shop') }}">Add</a>
         </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('coffee.search_shop') }}">Search</a>
         </li>
-        {% endif %}
       </ul>
       <!-- Login/Logout -->
       {% if security.registerable or security.recoverable or security.confirmable %}
