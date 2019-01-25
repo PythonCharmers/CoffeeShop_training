@@ -113,3 +113,7 @@ environment_config/*
 
 # os x
 .DS_Store
+
+# zappa
+zappa_settings.json
+*.sqlite

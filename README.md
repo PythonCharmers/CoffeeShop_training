@@ -1,70 +1,72 @@
-# Setup
+# Python Charmers Coffee Reviews
 
-Use this guide if you do NOT want to use Docker in your project.
+This is the Python Charmers Coffee Shop application.
 
 ## Getting Started
 
-Create and activate a virtual environment, and then install the requirements.
+Create and activate a virtual environment, and then install the requirements:
 
-### Set Environment Variables
+    pip install -r requirements.txt
+    pip install -r dev_requirements.txt
+    
+Copy sample environment file from the `environment_config` folder into a file
+`.env` in the base folder:
 
-Update *project/server/config.py*, and then run:
+    cp environment_config/sample.env .env
+    
+Finally, you'll need to create a new bucket on S3 to store photos. It should 
+not block public ACLs from uploading. It will be used to store uploaded 
+photos.
+    
+### Setting up environment variables
 
-```sh
-$ export APP_NAME="CoffeeShop"
-$ export APP_SETTINGS="project.server.config.DevelopmentConfig"
-$ export FLASK_DEBUG=1
-```
+The following environment variables should be updated in the `.env` files:
 
-Using [Pipenv](https://docs.pipenv.org/) or [python-dotenv](https://github.com/theskumar/python-dotenv)? Use the *.env* file to set environment variables:
+| Variable | Description |
+|-|-|
+| `SECRET_KEY` | The application secret key. You could use `python3 -c "import os; print(os.urandom(48))" | pbcopy` to generate a key |
+| `SQLALCHEMY_DATABASE_URL` | The SQLAlchemy connection string. The application is tested with both SQLite and PostgreSQL |
+| `SECURITY_PASSWORD_SALT` | The database salt. Can be generated in the same way as the `SECRET_KEY` |
+| `S3_BUCKET` | The name of the bucket you've set up to store your data |
+| `S3_LOCATION` | If your bucket is outside Sydney you'll need to update the bucket location |
 
-```sh
-APP_NAME="CoffeeShop"
-APP_SETTINGS="project.server.config.DevelopmentConfig"
-FLASK_DEBUG=1
-```
+To run an app you will also need to set an environment variable `FLASK_APP` to `server`:
+
+    export FLASK_APP=server
 
 ### Create DB
 
-```sh
-$ python manage.py create-db
-$ python manage.py db init
-$ python manage.py db migrate
-$ python manage.py create-admin
-$ python manage.py create-data
-```
+You can use Alembic to set up the database:
 
-### Run the Application
+    flask db upgrade
 
+## Runing the application locally
 
-```sh
-$ python manage.py run
-```
+You can run the server locally using the standard flask comands.
 
-Access the application at the address [http://localhost:5000/](http://localhost:5000/)
+    flask run
 
-### Testing
+## Deploying to AWS Lambda with Zappa
 
-Without coverage:
+To deploy to AWS Lambda you'll need:
 
-```sh
-$ python manage.py test
-```
+1. To have the AWS CLI installed and configured
+2. To install Zappa (if you're using Python 3.7 use `pip install 
+   git+https://github.com/itamt/Zappa.git`)
+3. You will need a database setup on RDS where the application data will be 
+   stored
 
-With coverage:
+From this point you can configure your Zappa application:
 
-```sh
-$ python manage.py cov
-```
+1. Use `zappa init` to generate your `zappa_settings.json`
+2. Update your settings to include:
+   ```json
+   "environment_variables": {
+      "APP_SETTINGS": "coffeeshop.server.config.ProductionConfig"
+   }
+   ```
+3. Update your `.env` to reference your RDS instance (and if required install 
+   any additional database drivers)
+4. Use `zappa deploy` to deploy your application
 
-Run flake8 on the app:
-
-```sh
-$ python manage.py flake
-```
-
-or
-
-```sh
-$ flake8 project
-```
+Once deployment has finished you'll get a URL that you can use to access the service.
