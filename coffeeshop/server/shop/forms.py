@@ -44,7 +44,7 @@ class ReviewForm(FlaskForm):
         validators=[DataRequired()],
         choices=[
             (1, '👍'),
-            (2, '👎')
+            (0, '👎')
         ],
         coerce=int
     )

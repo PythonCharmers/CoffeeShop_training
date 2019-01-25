@@ -1,4 +1,6 @@
 # project/server/models.py
+from datetime import datetime
+
 from geoalchemy2 import Geography
 from sqlalchemy_utils import URLType, ChoiceType
 
@@ -17,9 +19,9 @@ class Shop(db.Model):
     ))
     url = db.Column(URLType)
     photo = db.Column(db.String)  # store the URL location of uploaded photos, or perhaps just the filename.
+    date_added = db.Column(db.DateTime, default=datetime.utcnow)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
     user = db.relationship(User, backref=db.backref('shops'))
 
     def __repr__(self):
@@ -37,6 +39,7 @@ class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.Integer, nullable=False)
     comment = db.Column(db.String)
+    date_added = db.Column(db.DateTime, default=datetime.utcnow)
 
     shop_id = db.Column(db.Integer, db.ForeignKey('shop.id'), nullable=False)
     shop = db.relationship(Shop, backref=db.backref('reviews', lazy='joined'))

@@ -16,5 +16,17 @@
   <p><a href="{{ shop.url }}">{{ shop.url }}</a></p>
   {% endif %}
   <h2>Reviews</h2>
+  {% if avg_rating %}
+    <p>{{ (avg_rating * 100)|round|int }}% of customers think this is a great coffee!</p>
+  {% else %}
+    <p>No reviews yet. Why not try it out?</p>
+  {% endif %}
   <p><a href="{{ url_for('coffee.add_review', shop_id=shop.id) }}">Add your review!</a></p>
+  {% if review_comments %}
+    <ul>
+  {% for review in review_comments %}
+      <li>{{ review.comment }}</li>
+  {% endfor %}
+    </ul>
+  {% endif %}
 {% endblock %}

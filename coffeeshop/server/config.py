@@ -21,9 +21,9 @@ class BaseConfig(object):
     # security
     SECURITY_PASSWORD_HASH = env("SECURITY_PASSWORD_HASH")
     SECURITY_PASSWORD_SALT = env("SECURITY_PASSWORD_SALT")
-    SECURITY_TRACKABLE = env("SECURITY_TRACKABLE")
-    SECURITY_REGISTERABLE = env("SECURITY_REGISTERABLE")
-    SECURITY_SEND_REGISTER_EMAIL = env("SECURITY_SEND_REGISTER_EMAIL")
+    SECURITY_TRACKABLE = env.bool("SECURITY_TRACKABLE")
+    SECURITY_REGISTERABLE = env.bool("SECURITY_REGISTERABLE")
+    SECURITY_SEND_REGISTER_EMAIL = env.bool("SECURITY_SEND_REGISTER_EMAIL")
 
     # s3 file upload
     S3_BUCKET = env('S3_BUCKET')
@@ -31,13 +31,14 @@ class BaseConfig(object):
     S3_LOCATION = env('S3_LOCATION')
 
     # other
-    WTF_CSRF_ENABLED = False
+    WTF_CSRF_ENABLED = env.bool('WTF_CSRF_ENABLED')
     MAX_CONTENT_LENGTH = env.int('MAX_CONTENT_LENGTH', 4194304)
 
 class DevelopmentConfig(BaseConfig):
     """Development configuration."""
 
-    pass
+    DEBUG_TB_ENABLED = env.bool('DEBUG_TB_ENABLED')
+    DEBUG_TB_INTERCEPT_REDIRECTS = env.bool('DEBUG_TB_INTERCEPT_REDIRECTS')
 
 class TestingConfig(BaseConfig):
     """Testing configuration."""
