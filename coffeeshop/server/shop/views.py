@@ -40,7 +40,7 @@ def shops(id):
         rating_query,
         Shop.id == rating_query.c.shop_id
     ).filter(Shop.id == id)
-    shop, avg_rating = query.first()
+    shop, avg_rating = query.first_or_404()
 
     review_comments = list(filter(lambda r: r.comment, shop.reviews))
     return render_template(
