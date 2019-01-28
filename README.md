@@ -8,16 +8,16 @@ Create and activate a virtual environment, and then install the requirements:
 
     pip install -r requirements.txt
     pip install -r dev_requirements.txt
-    
+
 Copy sample environment file from the `environment_config` folder into a file
 `.env` in the base folder:
 
     cp environment_config/sample.env .env
-    
-Finally, you'll need to create a new bucket on S3 to store photos. It should 
-not block public ACLs from uploading. It will be used to store uploaded 
+
+Finally, you'll need to create a new bucket on S3 to store photos. It should
+not block public ACLs from uploading. It will be used to store uploaded
 photos.
-    
+
 ### Setting up environment variables
 
 The following environment variables should be updated in the `.env` files:
@@ -51,9 +51,9 @@ You can run the server locally using the standard flask comands.
 To deploy to AWS Lambda you'll need:
 
 1. To have the AWS CLI installed and configured
-2. To install Zappa (if you're using Python 3.7 use `pip install 
+2. To install Zappa (if you're using Python 3.7 use `pip install
    git+https://github.com/itamt/Zappa.git`)
-3. You will need a database setup on RDS where the application data will be 
+3. You will need a database setup on RDS where the application data will be
    stored
 
 From this point you can configure your Zappa application:
@@ -65,12 +65,85 @@ From this point you can configure your Zappa application:
       "APP_SETTINGS": "coffeeshop.server.config.ProductionConfig"
    }
    ```
-3. Update your `.env` to reference your RDS instance (and if required install 
+3. Update your `.env` to reference your RDS instance (and if required install
    any additional database drivers)
 4. Use `zappa deploy` to deploy your application
 
 Once deployment has finished you'll get a URL that you can use to access the
 service.
+
+## Workflow during challenge competitions
+
+Two remotes on trainer laptop:
+
+```
+git remote add CoffeeShop_public [URL HERE]
+```
+
+1. public: PythonCharmers/CoffeeShop_public: this only has the master branch.
+2. private with solution branches: PythonCharmers/CoffeeShop_solutions
+
+After each challenge competition, trainer is to merge the relevant challenge branch with master and git push to the public remote.
+
+## Setup of databases for each group on the RDS instance
+
+psql -h code-g-coffeeshop-db.cwuyyfxp47mk.us-west-1.rds.amazonaws.com -U dbadmin -d template1
+[Prompt for password]
+
+template1=> create database group0;
+CREATE DATABASE
+template1=> create database group1;
+CREATE DATABASE
+template1=> create database group2;
+CREATE DATABASE
+template1=> create database group3;
+CREATE DATABASE
+template1=> create database group4;
+CREATE DATABASE
+template1=> create database group5;
+CREATE DATABASE
+
+template1=> grant create on database group0 to girlsintech;
+GRANT
+template1=> grant create on database group1 to girlsintech;
+GRANT
+template1=> grant create on database group2 to girlsintech;
+GRANT
+template1=> grant create on database group3 to girlsintech;
+GRANT
+template1=> grant create on database group4 to girlsintech;
+GRANT
+template1=> grant create on database group5 to girlsintech;
+GRANT
+template1=> \c group0
+psql (11.1, server 10.4)
+SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: off)
+You are now connected to database "group0" as user "dbadmin".
+group0=> alter default privileges in schema public grant all on tables to girlsintech;
+
+
+### User
+girlsintech
+
+### Password
+pythoncharmers
+
+for each of the databases named `group0` to `group5`. (Group0 is for our dev / testing purposes).
+
+### Postgres
+```
+\dt
+```
+describe tables'
+
+After running
+```
+flask db upgrade
+```
+Log in and
+```
+grant girlsintech to dbadmin;
+```
 
 ## Challenges
 
@@ -135,7 +208,7 @@ simple search API that returns a Shop in the form:
 ```json
 {
   "id": int,
-  
+
 }
 ```
 
@@ -151,12 +224,12 @@ which are being falsely reported, specifically:
 Generate a .pylintrc file for your project with:
 
 ```sh
-pylint --generate-rcfile > .pylintrc 
+pylint --generate-rcfile > .pylintrc
 ```
 
 In the `.pylintrc` file add those two errors to the disabled messages list.
 
-Re-run `pylint` and update the files so that the score is at least 8 out of 10. 
+Re-run `pylint` and update the files so that the score is at least 8 out of 10.
 
 ### Day 4 Challenge 2: TODO?
 
@@ -184,5 +257,5 @@ for the world to use and see. Install Zappa and run the initialisation
 process. Once you've put the settings together for a dev environment deploy
 the application to AWS lambda and test that it works as a serverless
 application. You should be able to access the application with the same
-users you created when testing the application locally in the previous 
-exercise. 
+users you created when testing the application locally in the previous
+exercise.
