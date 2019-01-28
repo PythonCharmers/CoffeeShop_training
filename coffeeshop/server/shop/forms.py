@@ -4,12 +4,9 @@ Forms for adding shops and reviews
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, HiddenField, SubmitField, RadioField
-from wtforms.validators import DataRequired, Email, Length, EqualTo, URL
+from wtforms.validators import DataRequired, URL, AnyOf
 from flask_uploads import UploadSet, IMAGES
-from flask_wtf.file import FileField, FileAllowed, FileRequired
-
-
-from .models import Shop, Review
+from flask_wtf.file import FileField, FileAllowed
 
 
 images = UploadSet('images', IMAGES)
@@ -41,7 +38,7 @@ class ShopForm(FlaskForm):
 class ReviewForm(FlaskForm):
     rating = RadioField(
         label='How was the coffee?',
-        validators=[DataRequired()],
+        validators=[AnyOf((0, 1))],
         choices=[
             (1, '👍'),
             (0, '👎')

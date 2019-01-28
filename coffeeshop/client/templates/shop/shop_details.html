@@ -16,7 +16,7 @@
   <p><a href="{{ shop.url }}">{{ shop.url }}</a></p>
   {% endif %}
   <h2>Reviews</h2>
-  {% if avg_rating %}
+  {% if avg_rating is not none %}
     <p>{{ (avg_rating * 100)|round|int }}% of customers think this is a great coffee!</p>
   {% else %}
     <p>No reviews yet. Why not try it out?</p>
