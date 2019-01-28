@@ -72,16 +72,16 @@ From this point you can configure your Zappa application:
 Once deployment has finished you'll get a URL that you can use to access the
 service.
 
-## Quizzes
+## Challenges
 
 There will be two quizzes per day based on the application for the coffee shop
 application.
 
-Quizz solutions will be separated into individual branches as noted below (in
+Challenge solutions will be separated into individual branches as noted below (in
 the form `day_n/quiz_x`), and there is a `combined_solutions` branch where
 all quizzes are merged together.
 
-### Day 2 Quiz 1: Templating
+### Day 2 Challenge 1: Templating
 
 The front page of the coffee shop application is very bare at the moment. We
 can do better:
@@ -99,7 +99,7 @@ can do better:
    individual shop page (see the search results for inspiration if you get
    stuck)
 
-### Day 2 Quiz 2: Debugging
+### Day 2 Challenge 2: Debugging
 
 What is the current value of the `PERMANENT_SESSION_LIFETIME` configuration
 variable? Hint: It's not in the `.env` so what tool can you use to find out?
@@ -110,7 +110,7 @@ Try running an arbitrary command on your computer through the web browser.
 
 **Warning!** This is why we must never use `FLASK_ENV=development` for a publicly visible site!!
 
-### Day 3 Quiz 1: Database migrations
+### Day 3 Challenge 1: Database migrations
 
 To help avoid spam and fake reviews in our application we want to record the
 user's location when they write a review.
@@ -125,7 +125,7 @@ user's location when they write a review.
    pass it through to create the Review object
 5. Test adding a review which should now include the location.
 
-### Day 3 Quiz 2: API Access
+### Day 3 Challenge 2: API Access
 
 TODO: Connexion for a simple API endpoint - doesn't seem to be a good / easy way to integrate with the rest of the application?
 
@@ -139,7 +139,7 @@ simple search API that returns a Shop in the form:
 }
 ```
 
-### Day 4 Quiz 1: Cleaning up your code
+### Day 4 Challenge 1: Cleaning up your code
 
 Running `pylint` against the current application results in a (very) low
 score. There are issues with the code style, but there are also some errors
@@ -158,9 +158,9 @@ In the `.pylintrc` file add those two errors to the disabled messages list.
 
 Re-run `pylint` and update the files so that the score is at least 8 out of 10. 
 
-### Day 4 Quiz 2: TODO?
+### Day 4 Challenge 2: TODO?
 
-### Day 5 Quiz 1: Prep your application for production
+### Day 5 Challenge 1: Prep your application for production
 
 Create a new production database in RDS. Back up your development `.env` file.
 Then update your `.env` file to reflect a production environment. You should
@@ -177,7 +177,7 @@ shop to your production application (if you are missing tables you might need
 to consider what is missing when you changed databases, and what you can use
 to fix it).
 
-### Day 5 Quiz 2: Deploying your application to AWS Lambda
+### Day 5 Challenge 2: Deploying your application to AWS Lambda
 
 The final step in the process of building a web application is deploying it
 for the world to use and see. Install Zappa and run the initialisation
