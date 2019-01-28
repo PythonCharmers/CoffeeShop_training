@@ -85,6 +85,65 @@ git remote add CoffeeShop_public [URL HERE]
 
 After each challenge competition, trainer is to merge the relevant challenge branch with master and git push to the public remote.
 
+## Setup of databases for each group on the RDS instance
+
+psql -h code-g-coffeeshop-db.cwuyyfxp47mk.us-west-1.rds.amazonaws.com -U dbadmin -d template1
+[Prompt for password]
+
+template1=> create database group0;
+CREATE DATABASE
+template1=> create database group1;
+CREATE DATABASE
+template1=> create database group2;
+CREATE DATABASE
+template1=> create database group3;
+CREATE DATABASE
+template1=> create database group4;
+CREATE DATABASE
+template1=> create database group5;
+CREATE DATABASE
+
+template1=> grant create on database group0 to girlsintech;
+GRANT
+template1=> grant create on database group1 to girlsintech;
+GRANT
+template1=> grant create on database group2 to girlsintech;
+GRANT
+template1=> grant create on database group3 to girlsintech;
+GRANT
+template1=> grant create on database group4 to girlsintech;
+GRANT
+template1=> grant create on database group5 to girlsintech;
+GRANT
+template1=> \c group0
+psql (11.1, server 10.4)
+SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: off)
+You are now connected to database "group0" as user "dbadmin".
+group0=> alter default privileges in schema public grant all on tables to girlsintech;
+
+
+### User
+girlsintech
+
+### Password
+pythoncharmers
+
+for each of the databases named `group0` to `group5`. (Group0 is for our dev / testing purposes).
+
+### Postgres
+```
+\dt
+```
+describe tables'
+
+After running
+```
+flask db upgrade
+```
+Log in and 
+```
+grant girlsintech to dbadmin;
+```
 ## Quizzes
 
 There will be two quizzes per day based on the application for the coffee shop
