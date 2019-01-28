@@ -99,12 +99,16 @@ can do better:
    individual shop page (see the search results for inspiration if you get
    stuck)
 
-### Day 2 Quiz 1: Debugging
+### Day 2 Quiz 2: Debugging
 
 What is the current value of the `PERMANENT_SESSION_LIFETIME` configuration
 variable? Hint: It's not in the `.env` so what tool can you use to find out?
 Note when you do which other environment variables are also easily
 accessible.
+
+Try running an arbitrary command on your computer through the web browser.
+
+**Warning!** This is why we must never use `FLASK_ENV=development` for a publicly visible site!!
 
 ### Day 3 Quiz 1: Database migrations
 
