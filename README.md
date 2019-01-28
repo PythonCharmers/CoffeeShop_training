@@ -231,7 +231,15 @@ In the `.pylintrc` file add those two errors to the disabled messages list.
 
 Re-run `pylint` and update the files so that the score is at least 8 out of 10.
 
-### Day 4 Challenge 2: TODO?
+### Day 4 Challenge 2: Make a calculator with test-driven-development
+
+The general idea is that we will put together a set of features for the participants to implement then we will give points for each feature in proportion to how difficult that feature is to implement.
+We will then multiply the total points scored by the coverage percentage to get to a final score.
+
+Some scaffolding for the testing environment pipeline can be found here:
+https://github.com/shuttle1987/TDDskeleton
+
+This will help avoid time spent on setting up boilerplate for the testing environment.
 
 ### Day 5 Challenge 1: Prep your application for production
 
