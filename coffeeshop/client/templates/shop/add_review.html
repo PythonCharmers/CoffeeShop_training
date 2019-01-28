@@ -2,6 +2,20 @@
 {% block content %}
 {% from "security/_macros.html" import render_field_with_errors, render_field %}
 <script>
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    }
+    return true;
+  }
+
+  function showPosition(position) {
+    var latitude = document.getElementById("latitude");
+    var longitude = document.getElementById("longitude");
+    latitude.value = position.coords.latitude;
+    longitude.value = position.coords.longitude;
+  }
+
   {# from https://stackoverflow.com/a/5448595/379566 #}
   function findGetParameter(parameterName) {
       var result = null,
