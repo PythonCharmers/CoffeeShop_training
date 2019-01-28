@@ -72,6 +72,19 @@ From this point you can configure your Zappa application:
 Once deployment has finished you'll get a URL that you can use to access the
 service.
 
+## Workflow during challenge competitions
+
+Two remotes on trainer laptop:
+
+```
+git remote add CoffeeShop_public [URL HERE]
+```
+
+1. public: PythonCharmers/CoffeeShop_public: this only has the master branch.
+2. private with solution branches: PythonCharmers/CoffeeShop_solutions
+
+After each challenge competition, trainer is to merge the relevant challenge branch with master and git push to the public remote.
+
 ## Quizzes
 
 There will be two quizzes per day based on the application for the coffee shop
