@@ -1,4 +1,4 @@
 alembic
 pytest
 pytest-cov
-pip install flask-shell-ipython
+flask-shell-ipython
