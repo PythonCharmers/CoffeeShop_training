@@ -34,6 +34,33 @@ To run an app you will also need to set an environment variable `FLASK_APP` to `
 You can use Alembic to set up the database:
 
     flask db upgrade
+    
+### AWS
+
+Ultimately this application is intended to be deployed on AWS. As such there's
+a dependency on the `boto3` library. The application will work locally
+provided you have `boto3` installed, but for uploading files to S3 and
+deployment to AWS Lambda you will need the AWS CLI installed and configured.
+
+Installing the AWS CLI is easy (if you wish there is [complete documentation
+available as well](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)):
+
+1. Outside your Virtual Environment (to install globally on your system) run:
+   ```sh
+   pip3 install awscli
+   ```
+2. Copy your AWS Access Key ID and your AWS Secret Access Key from your IAM
+   role in the AWS managment console
+3. From the command line run:
+   ```sh
+   aws configure
+   ```
+   to complete the configuration process
+4. Test the configuration by running:
+   ```sh
+   aws s3 ls
+   ```
+   to list all of your S3 buckets along with their unique identifiers
 
 ## Runing the application locally
 
@@ -41,23 +68,15 @@ You can run the server locally using the standard flask comands.
 
     flask run
 
-## Workflow during challenge competitions
 
-Before each exercise, the participants run:
+## Extended exercises
 
-```
-git pull origin/day_2/quiz_1
-```
+There will be an extended exercises per day based on the coffee shop
+application.
 
-
-## Longer (challenge) exercises
-
-There will be around two longer exercises per day based on the coffee shop application.
-
-The solutions will be separated into individual branches as noted below (in
-the form `day_n/quiz_x`), and there is a `combined_solutions` branch where
-all quizzes are merged together.
-
+The solutions will be separated into individual branches (in the form 
+`day_n_exercise`), and there is a `combined_solutions` branch where all
+extended exercises are merged together.
 
 ### Day 2 Extended exercise: Templating
 
@@ -70,7 +89,7 @@ can do better:
    shops to pass through to the template:
 
    ```python
-   from .models import Shop
+   from coffeeshop.server.shop.models import Shop
    shops = Shop.query.order_by(Shop.date_added.desc()).limit(10)
    ```
 
@@ -88,7 +107,7 @@ simple search API that returns a Shop in the form:
 
 ```json
 {
-  "id": int,
+  "id": "int",
 
 }
 ```
@@ -114,9 +133,9 @@ In the `.pylintrc` file add those two errors to the disabled messages list.
 Re-run `pylint` and update the files so that the score is at least 8 out of 10.
 
 
-## Deployment
+### Day 5 extended exercise: Preparation for deployment
 
-### Deploying to AWS Lambda with Zappa
+#### Prepping your application for deployment
 
 To deploy to AWS Lambda you'll need:
 
@@ -124,37 +143,25 @@ To deploy to AWS Lambda you'll need:
 2. To install Zappa (if you're using Python 3.7 use `pip install
    git+https://github.com/itamt/Zappa.git`)
 3. You will need a database setup on RDS where the application data will be
-   stored
+   stored - the connection string for an accessible PostGreSQL database will be
+   provided via a download link by the trainers.
+4. You'll need to create a new bucket on S3 to store photos. It should not block
+   public ACLs from uploading. It will be used to store uploaded photos.
+5. You'll need to update the following environment variables in your `.env`
+   file (**note:** it's a good idea to backup your development `.env` file first - 
+   possibly with `cp .env environment_config/dev.env`):
+   - `SECRET_KEY` should be generated for production as per the instructions
+     above
+   - `SECURITY_PASSWORD_SALT` likewise the password salt should be updated
+   - `SQLALCHEMY_DATABASE_URI` the connection string for your RDS database
+   - `FLASK_ENV` should now be set to `production`
+   - `WTF_CSRF_ENABLED` should be `True`
+6. Run the Alembic upgrade to add your database tables on the server
 
-From this point you can configure your Zappa application:
+#### Photos in S3
 
-1. Use `zappa init` to generate your `zappa_settings.json`
-2. Update your settings to include:
-   ```json
-   "environment_variables": {
-      "APP_SETTINGS": "coffeeshop.server.config.ProductionConfig"
-   }
-   ```
-3. Update your `.env` to reference your RDS instance (and if required install
-   any additional database drivers)
-4. Use `zappa deploy` to deploy your application
-
-Once deployment has finished you'll get a URL that you can use to access the
-service.
-
-
-### Day 5 Extended exercise 1: Photos in S3
-
-Finally, you'll need to create a new bucket on S3 to store photos. It should
-not block public ACLs from uploading. It will be used to store uploaded
-photos.
-
-### Production environment variables
-
-If you're deploying on AWS Lambda you won't have local file storage available.
-Instead you should be looking to store static files on a dedicated server, for
-example S3. The production settings for the server assume this is the case, and
-you will need to set your S3 settings accordingly:
+Your goal is to upload photos to a S3 bucket. As such you'll need to update your 
+S3 settings accordingly (in your `.env` file):
 
 | Variable | Description |
 |-|-|
@@ -162,22 +169,20 @@ you will need to set your S3 settings accordingly:
 | `S3_KEY_BASE` | The name of the folder inside your S3 bucket where the photo will be stored |
 | `S3_LOCATION` | If your bucket is outside Sydney you'll need to update the bucket location |
 
+Finally, to ensure the upload works, set the environment variable that will
+control your app:
 
-### Day 5 Extended exercise 2: Prep your application for production
+On Windows:
 
-Create a new production database in RDS. Back up your development `.env` file.
-Then update your `.env` file to reflect a production environment. You should
-update the following environment variables:
+```sh
+set APP_SETTINGS="coffeeshop.server.config.ProductionConfig"
+```
 
-- `SECRET_KEY`
-- `SECURITY_PASSWORD_SALT`
-- `SQLALCHEMY_DATABASE_URI`
-- `FLASK_ENV`
-- `WTF_CSRF_ENABLED`
+On Unix or OS X:
 
-Confirm that your updated settings work by adding a new user, and adding a new
-shop to your production application (if you are missing tables you might need
-to consider what is missing when you changed databases, and what you can use
-to fix it).
+```sh
+export APP_SETTINGS="coffeeshop.server.config.ProductionConfig"
+```
 
-Create an S3 bucket
+Then run the app as normal. Test that when you create a new shop and add a photo
+that instead of being stored locally, the file is uploaded to your S3 bucket.
