@@ -47,24 +47,21 @@ You can run the server locally using the standard flask comands.
 
 ## Workflow during challenge competitions
 
-Two remotes on trainer laptop:
+Before each exercise, the participants run:
 
 ```
-git remote add CoffeeShop_public [URL HERE]
+git pull origin/day_2/quiz_1
 ```
 
-1. public: PythonCharmers/CoffeeShop_public: this only has the master branch.
-2. private with solution branches: PythonCharmers/CoffeeShop_solutions
 
-After each challenge competition, trainer is to merge the relevant challenge branch with master and git push to the public remote.
-
-## Longer exercises
+## Longer (challenge) exercises
 
 There will be around two longer exercises per day based on the coffee shop application.
 
 The solutions will be separated into individual branches as noted below (in
 the form `day_n/quiz_x`), and there is a `combined_solutions` branch where
 all quizzes are merged together.
+
 
 ### Day 2 Challenge 1: Templating
 
@@ -84,6 +81,7 @@ can do better:
 2. Update the template to show a list of these shops, linking to the
    individual shop page (see the search results for inspiration if you get
    stuck)
+
 
 ### Day 2 Challenge 2: Debugging
 
