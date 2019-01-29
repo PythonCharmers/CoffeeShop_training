@@ -2,9 +2,47 @@
 {% block content %}
 
 <div>
-  <h1>Welcome!</h1>
-  <hr /><br />
-  <p>Add some content here!</p>
+<h1>Welcome to the coffee shop review service!</h1>
+<hr /><br />
+{% if shops %}
+<h2>Most recently added shops</h2>
+<ul>
+  {% for shop in shops %}
+  <li>
+    <a href="{{ url_for( 'coffee.shops', id=shop.id) }}">{{ shop.name }}</a>
+    {% if shop.address %}<br />{{ shop.address }}{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% if reviewed_shops %}
+<h2>Most recently reviewed shops</h2>
+<ul>
+  {% for shop in reviewed_shops %}
+  <li>
+    <a href="{{ url_for( 'coffee.shops', id=shop.id) }}">{{ shop.name }}</a>
+    {% if shop.address %}<br />{{ shop.address }}{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% if current_user.is_authenticated %}
+  {% if user_shops %}
+  <h2>Your most recently added shops</h2>
+  <ul>
+  {% for shop in shops %}
+  <li>
+    <a href="{{ url_for( 'coffee.shops', id=shop.id) }}">{{ shop.name }}</a>
+    {% if shop.address %}<br />{{ shop.address }}{% endif %}
+  </li>
+  {% endfor %}
+  </ul>
+  {% else %}
+    <p><a href="{{ url_for('coffee.add_shop') }}">Add</a> your own coffee shops!</p>
+  {% endif %}
+{% else %}
+<p><a href="{{ url_for_security('login') }}">Login</a> to add your own Coffee Shops and Reviews!</p>
+{% endif %}
 </div>
 
 {% endblock %}
