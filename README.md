@@ -27,12 +27,25 @@ The following environment variables should be updated in the `.env` files:
 | `SECRET_KEY` | The application secret key. You could use `python3 -c "import os; print(os.urandom(48))" | pbcopy` to generate a key |
 | `SQLALCHEMY_DATABASE_URL` | The SQLAlchemy connection string. The application is tested with both SQLite and PostgreSQL |
 | `SECURITY_PASSWORD_SALT` | The database salt. Can be generated in the same way as the `SECRET_KEY` |
-| `S3_BUCKET` | The name of the bucket you've set up to store your data |
-| `S3_LOCATION` | If your bucket is outside Sydney you'll need to update the bucket location |
+| `UPLOADED_PHOTOS_DEST` | The absolute path to the folder where uploaded photos will be stored on your local machine |
 
 To run an app you will also need to set an environment variable `FLASK_APP` to `server`:
 
     export FLASK_APP=server
+
+### Production environment variables
+
+If you're deploying on AWS Lambda you won't have local file storage available.
+Instead you should be looking to store static files on a dedicated server, for
+example S3. The production settings for the server assume this is the case, and
+you will need to set your S3 settings accordingly:
+
+| Variable | Description |
+|-|-|
+| `S3_BUCKET` | The name of the bucket you've set up to store your data |
+| `S3_KEY_BASE` | The name of the folder inside your S3 bucket where the photo will be stored |
+| `S3_LOCATION` | If your bucket is outside Sydney you'll need to update the bucket location |
+
 
 ### Create DB
 
