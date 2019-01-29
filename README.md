@@ -100,46 +100,56 @@ After each challenge competition, trainer is to merge the relevant challenge bra
 
 ## Setup of databases for each group on the RDS instance
 
-psql -h code-g-coffeeshop-db.cwuyyfxp47mk.us-west-1.rds.amazonaws.com -U dbadmin -d template1
+```sh
+> psql -h code-g-coffeeshop-db.cwuyyfxp47mk.us-west-1.rds.amazonaws.com -U dbadmin -d template1
 [Prompt for password]
+```
 
-template1=> create database group0;
-CREATE DATABASE
-template1=> create database group1;
-CREATE DATABASE
-template1=> create database group2;
-CREATE DATABASE
-template1=> create database group3;
-CREATE DATABASE
-template1=> create database group4;
-CREATE DATABASE
-template1=> create database group5;
-CREATE DATABASE
+Then to set up the database:
 
-template1=> grant create on database group0 to girlsintech;
-GRANT
-template1=> grant create on database group1 to girlsintech;
-GRANT
-template1=> grant create on database group2 to girlsintech;
-GRANT
-template1=> grant create on database group3 to girlsintech;
-GRANT
-template1=> grant create on database group4 to girlsintech;
-GRANT
-template1=> grant create on database group5 to girlsintech;
-GRANT
-template1=> \c group0
-psql (11.1, server 10.4)
-SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits: 256, compression: off)
-You are now connected to database "group0" as user "dbadmin".
-group0=> alter default privileges in schema public grant all on tables to girlsintech;
+```sql
+-- Create the user
+create role girlsintech with login;
+\password girlsintech
 
+-- Create the databases
+create database group0;
+create database group1;
+create database group2;
+create database group3;
+create database group4;
+create database group5;
 
-### User
-girlsintech
+-- Grant create priviliges on the databases
+grant create on database group0 to girlsintech;
+grant create on database group1 to girlsintech;
+grant create on database group2 to girlsintech;
+grant create on database group3 to girlsintech;
+grant create on database group4 to girlsintech;
+grant create on database group5 to girlsintech;
 
-### Password
-pythoncharmers
+-- Then make sure that the default priviliges on the databases for new tables 
+-- apply to user
+\c group0
+alter default privileges in schema public grant all on tables to girlsintech;
+\c group1
+alter default privileges in schema public grant all on tables to girlsintech;
+\c group2
+alter default privileges in schema public grant all on tables to girlsintech;
+\c group3
+alter default privileges in schema public grant all on tables to girlsintech;
+\c group4
+alter default privileges in schema public grant all on tables to girlsintech;
+\c group5
+alter default privileges in schema public grant all on tables to girlsintech;
+```
+
+This could probably be done with a standard setup script that would generate
+you some number of databases, but for now this does the job.
+
+| User | Password |
+|-|-|
+| girlsintech | pythoncharmers |
 
 for each of the databases named `group0` to `group5`. (Group0 is for our dev / testing purposes).
 
