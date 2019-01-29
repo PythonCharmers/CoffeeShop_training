@@ -119,8 +119,8 @@ def add_shop():
             address=address,
             url=url,
             photo=photo,
-            latitude=float(latitude),
-            longitude=float(longitude),
+            latitude=float(latitude) if latitude else None,
+            longitude=float(longitude) if longitude else None,
             user=current_user
         )
         db.session.add(shop)
