@@ -33,20 +33,6 @@ To run an app you will also need to set an environment variable `FLASK_APP` to `
 
     export FLASK_APP=server
 
-### Production environment variables
-
-If you're deploying on AWS Lambda you won't have local file storage available.
-Instead you should be looking to store static files on a dedicated server, for
-example S3. The production settings for the server assume this is the case, and
-you will need to set your S3 settings accordingly:
-
-| Variable | Description |
-|-|-|
-| `S3_BUCKET` | The name of the bucket you've set up to store your data |
-| `S3_KEY_BASE` | The name of the folder inside your S3 bucket where the photo will be stored |
-| `S3_LOCATION` | If your bucket is outside Sydney you'll need to update the bucket location |
-
-
 ### Create DB
 
 You can use Alembic to set up the database:
@@ -58,32 +44,6 @@ You can use Alembic to set up the database:
 You can run the server locally using the standard flask comands.
 
     flask run
-
-## Deploying to AWS Lambda with Zappa
-
-To deploy to AWS Lambda you'll need:
-
-1. To have the AWS CLI installed and configured
-2. To install Zappa (if you're using Python 3.7 use `pip install
-   git+https://github.com/itamt/Zappa.git`)
-3. You will need a database setup on RDS where the application data will be
-   stored
-
-From this point you can configure your Zappa application:
-
-1. Use `zappa init` to generate your `zappa_settings.json`
-2. Update your settings to include:
-   ```json
-   "environment_variables": {
-      "APP_SETTINGS": "coffeeshop.server.config.ProductionConfig"
-   }
-   ```
-3. Update your `.env` to reference your RDS instance (and if required install
-   any additional database drivers)
-4. Use `zappa deploy` to deploy your application
-
-Once deployment has finished you'll get a URL that you can use to access the
-service.
 
 ## Workflow during challenge competitions
 
@@ -98,82 +58,11 @@ git remote add CoffeeShop_public [URL HERE]
 
 After each challenge competition, trainer is to merge the relevant challenge branch with master and git push to the public remote.
 
-## Setup of databases for each group on the RDS instance
+## Longer exercises
 
-```sh
-> psql -h code-g-coffeeshop-db.cwuyyfxp47mk.us-west-1.rds.amazonaws.com -U dbadmin -d template1
-[Prompt for password]
-```
+There will be around two longer exercises per day based on the coffee shop application.
 
-Then to set up the database:
-
-```sql
--- Create the user
-create role girlsintech with login;
-\password girlsintech
-
--- Create the databases
-create database group0;
-create database group1;
-create database group2;
-create database group3;
-create database group4;
-create database group5;
-
--- Grant create priviliges on the databases
-grant create on database group0 to girlsintech;
-grant create on database group1 to girlsintech;
-grant create on database group2 to girlsintech;
-grant create on database group3 to girlsintech;
-grant create on database group4 to girlsintech;
-grant create on database group5 to girlsintech;
-
--- Then make sure that the default priviliges on the databases for new tables 
--- apply to user
-\c group0
-alter default privileges in schema public grant all on tables to girlsintech;
-\c group1
-alter default privileges in schema public grant all on tables to girlsintech;
-\c group2
-alter default privileges in schema public grant all on tables to girlsintech;
-\c group3
-alter default privileges in schema public grant all on tables to girlsintech;
-\c group4
-alter default privileges in schema public grant all on tables to girlsintech;
-\c group5
-alter default privileges in schema public grant all on tables to girlsintech;
-```
-
-This could probably be done with a standard setup script that would generate
-you some number of databases, but for now this does the job.
-
-| User | Password |
-|-|-|
-| girlsintech | pythoncharmers |
-
-for each of the databases named `group0` to `group5`. (Group0 is for our dev / testing purposes).
-
-### Postgres
-```
-\dt
-```
-describe tables'
-
-After running
-```
-flask db upgrade
-```
-Log in and
-```
-grant girlsintech to dbadmin;
-```
-
-## Challenges
-
-There will be two quizzes per day based on the application for the coffee shop
-application.
-
-Challenge solutions will be separated into individual branches as noted below (in
+The solutions will be separated into individual branches as noted below (in
 the form `day_n/quiz_x`), and there is a `combined_solutions` branch where
 all quizzes are merged together.
 
@@ -182,16 +71,17 @@ all quizzes are merged together.
 The front page of the coffee shop application is very bare at the moment. We
 can do better:
 
-1. Move the `/` endpoint from the main blueprint to the shop blueprint.
-   Likewise move the template.
-2. Update the endpoint to pass through the 10 most recently added shops. Since
-   we haven't covered SQLAlchemy yet, use the following to generate shops to
-   pass through to the template:
+1. Update the / endpoint to display the 10 most recently added shops.
+
+   Since we haven't covered SQLAlchemy yet, use the following to generate
+   shops to pass through to the template:
+
    ```python
    from .models import Shop
    shops = Shop.query.order_by(Shop.date_added.desc()).limit(10)
    ```
-3. Update the template to show a list of these shops, linking to the
+
+2. Update the template to show a list of these shops, linking to the
    individual shop page (see the search results for inspiration if you get
    stuck)
 
@@ -205,6 +95,7 @@ accessible.
 Try running an arbitrary command on your computer through the web browser.
 
 **Warning!** This is why we must never use `FLASK_ENV=development` for a publicly visible site!!
+
 
 ### Day 3 Challenge 1: Database migrations
 
@@ -221,6 +112,7 @@ user's location when they write a review.
    pass it through to create the Review object
 5. Test adding a review which should now include the location.
 
+
 ### Day 3 Challenge 2: API Access
 
 TODO: Connexion for a simple API endpoint - doesn't seem to be a good / easy way to integrate with the rest of the application?
@@ -234,6 +126,7 @@ simple search API that returns a Shop in the form:
 
 }
 ```
+
 
 ### Day 4 Challenge 1: Cleaning up your code
 
@@ -263,6 +156,50 @@ Some scaffolding for the testing environment pipeline can be found here:
 https://github.com/shuttle1987/TDDskeleton
 
 This will help avoid time spent on setting up boilerplate for the testing environment.
+
+
+## Deployment
+
+### Production environment variables
+
+If you're deploying on AWS Lambda you won't have local file storage available.
+Instead you should be looking to store static files on a dedicated server, for
+example S3. The production settings for the server assume this is the case, and
+you will need to set your S3 settings accordingly:
+
+| Variable | Description |
+|-|-|
+| `S3_BUCKET` | The name of the bucket you've set up to store your data |
+| `S3_KEY_BASE` | The name of the folder inside your S3 bucket where the photo will be stored |
+| `S3_LOCATION` | If your bucket is outside Sydney you'll need to update the bucket location |
+
+
+### Deploying to AWS Lambda with Zappa
+
+To deploy to AWS Lambda you'll need:
+
+1. To have the AWS CLI installed and configured
+2. To install Zappa (if you're using Python 3.7 use `pip install
+   git+https://github.com/itamt/Zappa.git`)
+3. You will need a database setup on RDS where the application data will be
+   stored
+
+From this point you can configure your Zappa application:
+
+1. Use `zappa init` to generate your `zappa_settings.json`
+2. Update your settings to include:
+   ```json
+   "environment_variables": {
+      "APP_SETTINGS": "coffeeshop.server.config.ProductionConfig"
+   }
+   ```
+3. Update your `.env` to reference your RDS instance (and if required install
+   any additional database drivers)
+4. Use `zappa deploy` to deploy your application
+
+Once deployment has finished you'll get a URL that you can use to access the
+service.
+
 
 ### Day 5 Challenge 1: Prep your application for production
 
