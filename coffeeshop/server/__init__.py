@@ -1,6 +1,7 @@
 # project/server/__init__.py
 import os
 
+import boto3
 from flask import Flask, render_template
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_bcrypt import Bcrypt
@@ -8,6 +9,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_uploads import UploadSet, configure_uploads, patch_request_class, IMAGES
 
 
 # instantiate the extensions
@@ -17,6 +19,8 @@ bootstrap = Bootstrap()
 db = SQLAlchemy()
 migrate = Migrate()
 security = Security()
+photos = UploadSet('photos', IMAGES)
+s3 = boto3.client("s3")  # even without credentials this should work
 
 
 def create_app(script_info=None):
@@ -105,6 +109,10 @@ def create_app(script_info=None):
     @app.shell_context_processor
     def ctx():
         return {"app": app, "db": db}
+
+    # flask-uploads
+    configure_uploads(app, (photos, ))
+    patch_request_class(app, None)
 
     # GNU Terry Pratchett
     @app.after_request

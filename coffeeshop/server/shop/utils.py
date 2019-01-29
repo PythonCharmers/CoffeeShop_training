@@ -6,10 +6,40 @@ Adapted s3 uploads from http://zabana.me/notes/upload-files-amazon-s3-flask.html
 import os.path
 from uuid import uuid4
 
-import boto3, botocore
 from flask import current_app
 
-s3 = boto3.client("s3")
+from coffeeshop.server import photos, s3
+
+
+def save_photo(file):
+    """
+    Generic entry point for saving a photo
+
+    If the current application is a production or testing app then assume that
+    you're always going to upload to S3. Otherwise, if your app is a
+    development app assume you're always going to use Flask-Uploads
+
+    :param file: File to upload from form
+    :return: path to file
+    :rtype: str
+    """
+    if current_app.config['FLASK_ENV'] in ('production', 'testing'):
+        return upload_file_to_s3(file)
+    else:  # assume development
+        return upload_file_to_disk(file)
+
+
+def upload_file_to_disk(file):
+    """
+    Use flask_uploads to save the file to disk
+
+    :param file: File to be uploaded
+    :return: Path to file
+    :rtype: str
+    """
+    return photos.url(
+        photos.save(file)
+    )
 
 
 def upload_file_to_s3(file, bucket_name=None, acl="public-read"):
@@ -38,7 +68,9 @@ def upload_file_to_s3(file, bucket_name=None, acl="public-read"):
         current_app.logger.exception(e)
         raise
 
-    return bucket_path
+    base_url = current_app.config['S3_LOCATION']
+
+    return f'{base_url}/{bucket_name}/{bucket_path}'
 
 
 def secure_filename(filename):

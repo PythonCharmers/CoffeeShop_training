@@ -4,11 +4,7 @@
   <h1>{{ shop.name }}</h1>
   {% if shop.photo %}
     <div>
-      <img
-          class="photo"
-          src="{{ '' | env_override('S3_LOCATION') }}/{{ '' | env_override('S3_BUCKET') }}/{{ shop.photo }}"
-          alt="{{ shop.name }} photo"
-      />
+      <img class="photo" src="{{ shop.photo }}" alt="{{ shop.name }} photo"/>
     </div>
   {% endif %}
   <p><strong>Address:</strong> {{ shop.address }}</p>

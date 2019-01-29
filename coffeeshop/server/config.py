@@ -28,28 +28,31 @@ class BaseConfig(object):
     SECURITY_POST_LOGOUT_VIEW = env('SECURITY_POST_LOGIN_VIEW')
     SECURITY_POST_REGISTER_VIEW = env('SECURITY_POST_REGISTER_VIEW')
 
-    # s3 file upload
-    S3_BUCKET = env('S3_BUCKET')
-    S3_KEY_BASE = env('S3_KEY_BASE')
-    S3_LOCATION = env('S3_LOCATION')
-
     # other
     WTF_CSRF_ENABLED = env.bool('WTF_CSRF_ENABLED')
     MAX_CONTENT_LENGTH = env.int('MAX_CONTENT_LENGTH', 4194304)
 
+
 class DevelopmentConfig(BaseConfig):
     """Development configuration."""
 
+    # Flask-Uploads
+    UPLOADED_PHOTOS_DEST = env('UPLOADED_PHOTOS_DEST')
+
     DEBUG_TB_ENABLED = env.bool('DEBUG_TB_ENABLED')
     DEBUG_TB_INTERCEPT_REDIRECTS = env.bool('DEBUG_TB_INTERCEPT_REDIRECTS')
-
-class TestingConfig(BaseConfig):
-    """Testing configuration."""
-
-    TESTING = True
 
 
 class ProductionConfig(BaseConfig):
     """Production configuration."""
 
-    pass
+    # s3 file upload
+    S3_BUCKET = env('S3_BUCKET')
+    S3_KEY_BASE = env('S3_KEY_BASE')
+    S3_LOCATION = env('S3_LOCATION')
+
+
+class TestingConfig(ProductionConfig):
+    """Testing configuration."""
+
+    TESTING = True

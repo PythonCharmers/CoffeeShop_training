@@ -7,7 +7,7 @@ from sqlalchemy import func, or_
 
 from coffeeshop.server import db
 from .forms import ShopForm, ReviewForm, SearchForm
-from .utils import secure_filename, upload_file_to_s3
+from .utils import secure_filename, save_photo
 from .models import Shop, Review
 
 
@@ -112,7 +112,7 @@ def add_shop():
         f = form.photo.data
         if f:
             f.filename = secure_filename(f.filename)
-            photo = upload_file_to_s3(f)
+            photo = save_photo(f)
 
         shop = Shop(
             name=shop_name,
