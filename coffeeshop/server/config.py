@@ -32,12 +32,12 @@ class BaseConfig(object):
     WTF_CSRF_ENABLED = env.bool('WTF_CSRF_ENABLED')
     MAX_CONTENT_LENGTH = env.int('MAX_CONTENT_LENGTH', 4194304)
 
+    # Flask-Uploads
+    UPLOADED_PHOTOS_DEST = env('UPLOADED_PHOTOS_DEST', '/var/tmp')
+
 
 class DevelopmentConfig(BaseConfig):
     """Development configuration."""
-
-    # Flask-Uploads
-    UPLOADED_PHOTOS_DEST = env('UPLOADED_PHOTOS_DEST')
 
     DEBUG_TB_ENABLED = env.bool('DEBUG_TB_ENABLED')
     DEBUG_TB_INTERCEPT_REDIRECTS = env.bool('DEBUG_TB_INTERCEPT_REDIRECTS')
