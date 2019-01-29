@@ -100,18 +100,24 @@ can do better:
 
 ### Day 3 Extended exercise: API Access
 
-TODO: Connexion for a simple API endpoint - doesn't seem to be a good / easy way to integrate with the rest of the application?
+It would be nice to create an API for people to programatically query the
+coffee shops, rather than having to scrape the site.
 
-To help integrate our application in other services we'd like to have a
-simple search API that returns a Shop in the form:
+Use Connexion to create a simple API to access the `Shops` model. It should have
+two endpoints:
 
-```json
-{
-  "id": "int",
+1. A list endpoint which lists stores 10 at a time. It should take a `page`
+   parameter which defaults to `1` and can be any positive integer, which is the
+   query offset for which stores to return.
+2. A search endpoint which lists stores matching a query passed via the `q`
+   parameter, in the same way the current `coffeeshop.server.shop.views.search_shop`
+   method handles queries. It should also take a page parameter.
+   
+The functions that are mapped by the `app.yaml` file should be store in
+`coffeeshop/server/shop/api.py`
 
-}
-```
-
+You will also need to create a new `create_connexion_app` method within your
+`coffeeshop/server/__init__.py` file.
 
 ### Day 4 Extended exercise: Cleaning up your code
 
