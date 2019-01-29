@@ -19,7 +19,9 @@
   document.body.onload = function(){getLocation()};
 
 </script>
+<div>
 <h1>{{ _('Add Coffee Shop') }}</h1>
+<hr /><br />
 <form action="{{ url_for('coffee.add_shop') }}" method="POST" name="add_shop_form" id="add_shop_form" enctype="multipart/form-data" >
   {{ form.hidden_tag() }}
   {{ render_field_with_errors(form.name) }}
@@ -28,5 +30,6 @@
   {{ render_field_with_errors(form.photo) }}
   {{ render_field(form.submit) }}
 </form>
+</div>
 
 {% endblock %}

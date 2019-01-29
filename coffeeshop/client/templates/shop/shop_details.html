@@ -1,7 +1,9 @@
 {% extends "_base.html" %}
 {% block content %}
 
+<div>
   <h1>{{ shop.name }}</h1>
+  <hr /><br />
   {% if shop.photo %}
     <div>
       <img class="photo" src="{{ shop.photo }}" alt="{{ shop.name }} photo"/>
@@ -25,4 +27,5 @@
   {% endfor %}
     </ul>
   {% endif %}
+</div>
 {% endblock %}

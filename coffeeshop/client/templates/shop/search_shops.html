@@ -1,7 +1,9 @@
 {% extends "_base.html" %}
 {% block content %}
 {% from "security/_macros.html" import render_field_with_errors, render_field %}
+<div>
 <h1>{{ _('Search') }}</h1>
+<hr /><br />
 <form action="{{ url_for('coffee.search_shop') }}" method="GET" name="search_form" id="search_form">
   {{ form.hidden_tag() }}
   {{ render_field_with_errors(form.q) }}
@@ -18,4 +20,5 @@
   {% endfor %}
   </ol>
 {% endif %}
+</div>
 {% endblock %}

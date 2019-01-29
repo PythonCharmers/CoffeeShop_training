@@ -38,7 +38,9 @@
   document.body.onload = function(){getShopId()}
 
 </script>
+<div>
 <h1>{{ _('Add Review for') }} {{ shop.name }}</h1>
+<hr /><br />
 <form action="{{ url_for('coffee.add_review') }}" method="POST" name="add_review_form" id="add_review_form" enctype="multipart/form-data" >
   {{ form.hidden_tag() }}
   <h3>{{ form.rating.label }}</h3>
@@ -46,5 +48,6 @@
   {{ render_field_with_errors(form.comment) }}
   {{ render_field(form.submit) }}
 </form>
+</div>
 
 {% endblock %}
