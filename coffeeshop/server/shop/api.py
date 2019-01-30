@@ -4,7 +4,6 @@ API endpoints for Connexion to consume
 from sqlalchemy import or_
 
 from .models import Shop
-from coffeeshop.server import db
 
 
 PAGE_SIZE = 10
