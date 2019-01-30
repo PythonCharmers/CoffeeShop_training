@@ -1,0 +1,100 @@
+openapi: 3.0.2
+
+info:
+  title: Coffee shop API
+  description: This is a sample API for coffee shop
+  termsOfService: http://example.com/terms/
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.0.1
+
+paths:
+  /:
+    get:
+      summary: "List all coffee shops"
+      operationId: coffeeshop.server.shop.api.list_shops
+      parameters:
+        - in: query
+          name: page
+          description: "Page of query results"
+          schema:
+            type: integer
+            default: 1
+          required: false
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/coffeeShopInformation"
+
+  /{shop_id}:
+    get:
+      summary: "Get details of a shop by its ID"
+      operationId: coffeeshop.server.shop.api.get_shop
+      parameters:
+        - in: path
+          name: shop_id
+          required: true
+          schema:
+            type: integer
+            description: "The shop ID"
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/coffeeShopInformation"
+
+  /search:
+    get:
+      summary: "Search coffee shops"
+      operationId: coffeeshop.server.shop.api.search
+      parameters:
+        - in: query
+          name: q
+          description: "The search string"
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: page
+          description: "Page of query results"
+          schema:
+            type: integer
+            default: 1
+          required: false
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/coffeeShopInformation"
+
+components:
+  schemas:
+    coffeeShopInformation:
+      type: "object"
+      properties:
+        id:
+          description: "Shop ID"
+          type: "integer"
+          format: "int64"
+        name:
+          description: "Shop name"
+          type: "string"
+        address:
+          description: "Shop address"
+          type: "string"

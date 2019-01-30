@@ -2,6 +2,7 @@
 import os
 
 import boto3
+import connexion
 from flask import Flask, render_template
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_bcrypt import Bcrypt
@@ -121,3 +122,38 @@ def create_app(script_info=None):
         return resp
 
     return app
+
+
+def create_api_app(script_info=None):
+    """
+    Application factory for the Connexion API
+
+    :param script_info:
+    :return:
+    """
+    api_app = connexion.FlaskApp(__name__, specification_dir='../../openapi/')
+    api_app.add_api('coffee_api.yaml')
+
+    app_settings = os.getenv(
+        "APP_SETTINGS", "coffeeshop.server.config.DevelopmentConfig"
+    )
+    api_app.app.config.from_object(app_settings)
+
+    # set up extensions
+    bcrypt.init_app(api_app.app)
+    toolbar.init_app(api_app.app)
+    bootstrap.init_app(api_app.app)
+    db.init_app(api_app.app)
+    migrate.init_app(api_app.app, db)
+
+    @api_app.app.after_request
+    def gnu_terry_pratchett(resp):
+        """
+        GNU Terry Pratchett
+
+        See http://gnuterrypratchett.com/ for how and why.
+        """
+        resp.headers.add("X-Clacks-Overhead", "GNU Terry Pratchett")
+        return resp
+
+    return api_app.app
