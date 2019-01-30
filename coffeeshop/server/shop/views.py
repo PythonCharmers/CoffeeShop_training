@@ -11,13 +11,13 @@ from .utils import secure_filename, save_photo
 from .models import Shop, Review
 
 
-coffee_blueprint = Blueprint("coffee", __name__)
+coffee_blueprint = Blueprint("coffee", __name__)  # pylint: disable=C0103
 
 
 # public
 
-@coffee_blueprint.route('/shop/<int:id>')
-def shops(id):
+@coffee_blueprint.route('/shop/<int:shop_id>')
+def shops(shop_id):
     """
     Display the informatino about the shop including the reviews
 
@@ -25,7 +25,7 @@ def shops(id):
     certainly going to be faster than doing  it in Python as a seconday step)
     we have to make a rating subquery and pull back the information from there.
 
-    :param id: Table ID for the coffeeshop
+    :param shop_id: Table ID for the coffeeshop
     """
     rating_query = db.session.query(
         Review.shop_id,
@@ -39,7 +39,7 @@ def shops(id):
     ).outerjoin(
         rating_query,
         Shop.id == rating_query.c.shop_id
-    ).filter(Shop.id == id)
+    ).filter(Shop.id == shop_id)
     shop, avg_rating = query.first_or_404()
 
     review_comments = list(filter(lambda r: r.comment, shop.reviews))
@@ -68,16 +68,16 @@ def search_shop():
         search_term = request.args['q']
         search_term = f'%{search_term}%'
     except KeyError:
-        shops = None
+        found_shops = None
     else:
-        shops = db.session.query(Shop).filter(or_(
+        found_shops = db.session.query(Shop).filter(or_(
             Shop.name.ilike(search_term),
             Shop.address.ilike(search_term)
         ))
 
     return render_template(
         'shop/search_shops.html',
-        shops=shops,
+        shops=found_shops,
         form=SearchForm()
     )
 
@@ -109,10 +109,10 @@ def add_shop():
         current_app.logger.debug(f'{latitude} {longitude}')
 
         photo = None
-        f = form.photo.data
-        if f:
-            f.filename = secure_filename(f.filename)
-            photo = save_photo(f)
+        photo_data = form.photo.data
+        if photo_data:
+            photo_data.filename = secure_filename(photo_data.filename)
+            photo = save_photo(photo_data)
 
         shop = Shop(
             name=shop_name,
@@ -146,7 +146,12 @@ def add_review():
         rating = form.rating.data
         comment = form.comment.data or None
 
-        review = Review(rating=rating, comment=comment, shop=shop, user=current_user)
+        review = Review(
+            rating=rating,
+            comment=comment,
+            shop=shop,
+            user=current_user
+        )
         db.session.add(review)
         db.session.commit()
         current_app.logger.info(f'Created new {review}')
@@ -161,5 +166,3 @@ def add_review():
 
     shop = Shop.query.get(shop_id)
     return render_template('shop/add_review.html', shop=shop, form=form)
-
-

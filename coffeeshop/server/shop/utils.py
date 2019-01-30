@@ -25,8 +25,9 @@ def save_photo(file):
     """
     if current_app.config['FLASK_ENV'] in ('production', 'testing'):
         return upload_file_to_s3(file)
-    else:  # assume development
-        return upload_file_to_disk(file)
+
+    # otherwise assume development
+    return upload_file_to_disk(file)
 
 
 def upload_file_to_disk(file):
@@ -64,8 +65,8 @@ def upload_file_to_s3(file, bucket_name=None, acl="public-read"):
             }
         )
 
-    except Exception as e:
-        current_app.logger.exception(e)
+    except Exception as error:
+        current_app.logger.exception(error)
         raise
 
     base_url = current_app.config['S3_LOCATION']

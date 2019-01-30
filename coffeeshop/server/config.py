@@ -1,55 +1,64 @@
-# project/server/config.py
+"""
+Configuration settings for the Flasak application.
+
+Using class based configuration coming from an environment .env file. Handy,
+because it us do additional things in config on top of the environment if we
+have to.
+"""
 import environs
 
-env = environs.Env()
-env.read_env()
+ENV = environs.Env()
+ENV.read_env()
 
 
-class BaseConfig(object):
+class BaseConfig:
     """Base configuration."""
 
     # Flask settings
-    APP_NAME = env("APP_NAME", "CoffeeShop")
-    FLASK_ENV = env("FLASK_ENV", "development")
-    SECRET_KEY = env("SECRET_KEY", "pythoncharmers")
+    APP_NAME = ENV("APP_NAME", "CoffeeShop")
+    FLASK_ENV = ENV("FLASK_ENV", "development")
+    SECRET_KEY = ENV("SECRET_KEY", "pythoncharmers")
 
     # database
-    BCRYPT_LOG_ROUNDS = env.int("BCRYPT_LOG_ROUNDS", 4)
-    SQLALCHEMY_TRACK_MODIFICATIONS = env.bool("SQLALCHEMY_TRACK_MODIFICATIONS", False)
-    SQLALCHEMY_DATABASE_URI = env('SQLALCHEMY_DATABASE_URI')
+    BCRYPT_LOG_ROUNDS = ENV.int("BCRYPT_LOG_ROUNDS", 4)
+    SQLALCHEMY_TRACK_MODIFICATIONS = ENV.bool(
+        "SQLALCHEMY_TRACK_MODIFICATIONS",
+        False
+    )
+    SQLALCHEMY_DATABASE_URI = ENV('SQLALCHEMY_DATABASE_URI')
 
     # security
-    SECURITY_PASSWORD_HASH = env("SECURITY_PASSWORD_HASH")
-    SECURITY_PASSWORD_SALT = env("SECURITY_PASSWORD_SALT")
-    SECURITY_TRACKABLE = env.bool("SECURITY_TRACKABLE")
-    SECURITY_REGISTERABLE = env.bool("SECURITY_REGISTERABLE")
-    SECURITY_SEND_REGISTER_EMAIL = env.bool("SECURITY_SEND_REGISTER_EMAIL")
-    SECURITY_POST_LOGIN_VIEW = env('SECURITY_POST_LOGIN_VIEW')
-    SECURITY_POST_LOGOUT_VIEW = env('SECURITY_POST_LOGOUT_VIEW')
-    SECURITY_POST_REGISTER_VIEW = env('SECURITY_POST_REGISTER_VIEW')
+    SECURITY_PASSWORD_HASH = ENV("SECURITY_PASSWORD_HASH")
+    SECURITY_PASSWORD_SALT = ENV("SECURITY_PASSWORD_SALT")
+    SECURITY_TRACKABLE = ENV.bool("SECURITY_TRACKABLE")
+    SECURITY_REGISTERABLE = ENV.bool("SECURITY_REGISTERABLE")
+    SECURITY_SEND_REGISTER_EMAIL = ENV.bool("SECURITY_SEND_REGISTER_EMAIL")
+    SECURITY_POST_LOGIN_VIEW = ENV('SECURITY_POST_LOGIN_VIEW')
+    SECURITY_POST_LOGOUT_VIEW = ENV('SECURITY_POST_LOGOUT_VIEW')
+    SECURITY_POST_REGISTER_VIEW = ENV('SECURITY_POST_REGISTER_VIEW')
 
     # other
-    WTF_CSRF_ENABLED = env.bool('WTF_CSRF_ENABLED')
-    MAX_CONTENT_LENGTH = env.int('MAX_CONTENT_LENGTH', 4194304)
+    WTF_CSRF_ENABLED = ENV.bool('WTF_CSRF_ENABLED')
+    MAX_CONTENT_LENGTH = ENV.int('MAX_CONTENT_LENGTH', 4194304)
 
     # Flask-Uploads
-    UPLOADED_PHOTOS_DEST = env('UPLOADED_PHOTOS_DEST', '/var/tmp')
+    UPLOADED_PHOTOS_DEST = ENV('UPLOADED_PHOTOS_DEST', '/var/tmp')
 
 
 class DevelopmentConfig(BaseConfig):
     """Development configuration."""
 
-    DEBUG_TB_ENABLED = env.bool('DEBUG_TB_ENABLED')
-    DEBUG_TB_INTERCEPT_REDIRECTS = env.bool('DEBUG_TB_INTERCEPT_REDIRECTS')
+    DEBUG_TB_ENABLED = ENV.bool('DEBUG_TB_ENABLED')
+    DEBUG_TB_INTERCEPT_REDIRECTS = ENV.bool('DEBUG_TB_INTERCEPT_REDIRECTS')
 
 
 class ProductionConfig(BaseConfig):
     """Production configuration."""
 
     # s3 file upload
-    S3_BUCKET = env('S3_BUCKET')
-    S3_KEY_BASE = env('S3_KEY_BASE')
-    S3_LOCATION = env('S3_LOCATION')
+    S3_BUCKET = ENV('S3_BUCKET')
+    S3_KEY_BASE = ENV('S3_KEY_BASE')
+    S3_LOCATION = ENV('S3_LOCATION')
 
 
 class TestingConfig(ProductionConfig):

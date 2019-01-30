@@ -1,4 +1,11 @@
-# project/server/__init__.py
+"""
+Entry point for the Flask application
+
+This contains the application factory method create_app to create the Flask app
+object. You can point the FLASK_APP environment here when running the app to
+have flask automatically call the create_app method, or another Python file (the
+WSGI file) can call create_app itself.
+"""
 import os
 
 import boto3
@@ -11,8 +18,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_uploads import UploadSet, configure_uploads, patch_request_class, IMAGES
 
-
 # instantiate the extensions
+# pylint: disable=C0103
+# note stylistically I'd prefer these to be lower case, so I can disable the
+# pylint error check for a particular line of code.
 bcrypt = Bcrypt()
 toolbar = DebugToolbarExtension()
 bootstrap = Bootstrap()
@@ -21,9 +30,13 @@ migrate = Migrate()
 security = Security()
 photos = UploadSet('photos', IMAGES)
 s3 = boto3.client("s3")  # even without credentials this should work
+# pylint: enable=C0103
 
 
 def create_app(script_info=None):
+    """
+    Application factory to create the Flask application.
+    """
 
     from logging.config import dictConfig
 
@@ -78,7 +91,7 @@ def create_app(script_info=None):
     from coffeeshop.server.models import User, Role
     from coffeeshop.server.user.forms import ExtendedRegisterForm
     datastore = SQLAlchemyUserDatastore(db, User, Role)
-    security_ctx = security.init_app(
+    security.init_app(
         app,
         datastore,
         register_form=ExtendedRegisterForm  # extend the register
@@ -89,20 +102,25 @@ def create_app(script_info=None):
     app.jinja_env.filters['env_override'] = env_override
 
     # error handlers
+    # pylint: disable=W0613,W0612
     @app.errorhandler(401)
     def unauthorized_page(error):
+        """Custom template for 401"""
         return render_template("errors/401.html"), 401
 
     @app.errorhandler(403)
     def forbidden_page(error):
+        """Custom template for 403"""
         return render_template("errors/403.html"), 403
 
     @app.errorhandler(404)
     def page_not_found(error):
+        """Custom template for 404"""
         return render_template("errors/404.html"), 404
 
     @app.errorhandler(500)
     def server_error_page(error):
+        """Custom template for 500"""
         return render_template("errors/500.html"), 500
 
     # shell context for flask cli
@@ -110,14 +128,19 @@ def create_app(script_info=None):
     def ctx():
         return {"app": app, "db": db}
 
+    @app.after_request
+    def gnu_terry_pratchett(resp):
+        """
+        GNU Terry Pratchett
+
+        See http://gnuterrypratchett.com/ for how and why.
+        """
+        resp.headers.add("X-Clacks-Overhead", "GNU Terry Pratchett")
+        return resp
+    # pylint: enable=W0613,W0612
+
     # flask-uploads
     configure_uploads(app, (photos, ))
     patch_request_class(app, None)
-
-    # GNU Terry Pratchett
-    @app.after_request
-    def gnu_terry_pratchett(resp):
-        resp.headers.add("X-Clacks-Overhead", "GNU Terry Pratchett")
-        return resp
 
     return app

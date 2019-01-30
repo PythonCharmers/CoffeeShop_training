@@ -1,16 +1,17 @@
-# project/server/user/views.py
+"""
+Views for the user blueprint
+"""
+from flask import render_template, Blueprint
+from flask_security import roles_required
 
 
-from flask import render_template, Blueprint, url_for, redirect, flash, request
-from flask_security import login_required
+user_blueprint = Blueprint("user", __name__)  # pylint: disable=C0103
 
-from coffeeshop.server import bcrypt, db
-from coffeeshop.server.models import User
-
-
-user_blueprint = Blueprint("user", __name__)
 
 @user_blueprint.route("/members")
-@login_required
+@roles_required('admin')
 def members():
+    """
+    A page which requires the user to be an admin
+    """
     return render_template("user/members.html")

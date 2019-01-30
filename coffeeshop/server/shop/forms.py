@@ -1,15 +1,14 @@
 """
 Forms for adding shops and reviews
 """
-
+from flask_uploads import UploadSet, IMAGES
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, HiddenField, SubmitField, RadioField
 from wtforms.validators import DataRequired, URL, AnyOf
-from flask_uploads import UploadSet, IMAGES
-from flask_wtf.file import FileField, FileAllowed
 
 
-images = UploadSet('images', IMAGES)
+images = UploadSet('images', IMAGES)  # pylint: disable=C0103
 
 
 class URLValidator(URL):
@@ -23,6 +22,9 @@ class URLValidator(URL):
 
 
 class ShopForm(FlaskForm):
+    """
+    HTML form a a Shop
+    """
     name = StringField(label='Shop name', validators=[DataRequired()])
     address = StringField(label='Address')
     url = StringField(label='Website', validators=[URLValidator()])
@@ -36,6 +38,9 @@ class ShopForm(FlaskForm):
 
 
 class ReviewForm(FlaskForm):
+    """
+    HTML form for a Review
+    """
     rating = RadioField(
         label='How was the coffee?',
         validators=[AnyOf((0, 1))],
@@ -52,5 +57,8 @@ class ReviewForm(FlaskForm):
 
 
 class SearchForm(FlaskForm):
+    """
+    HTML form to enter a search term
+    """
     q = StringField('Find a coffee shop', validators=[DataRequired()])
     submit = SubmitField()
