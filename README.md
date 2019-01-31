@@ -2,6 +2,49 @@
 
 This is the Python Charmers Coffee Shop application.
 
+## Really fast getting started
+
+1. Get the `.env` file from the trainers. This is configured for minimal
+   configuration
+2. In the `.env` file change your `DB_NUMBER` setting (at the top of the file)
+   to either your personal DB number or your group number.
+3. Create a new virtual environment:
+   ```sh
+   python3 -m venv venv
+   ```
+4. Activate the virtual environment
+
+   | OS | Command |
+   |-|-|
+   | Windows | `venv/bin/activate` |
+   | OS X / *nix | `source venv/bin/activate` |
+
+5. Install the application requirements
+   ```sh
+   pip install -r requirements.txt
+   pip install -r dev_requirements.txt
+   ```
+6. Set the `FLASK_APP` environment variabls
+
+   | OS | Command |
+   |-|-|
+   | Windows | set FLASK_APP=server |
+   | OS X / *nix | export FLASK_APP=server |
+
+7. Upgrade the database with `flask db upgrade`
+8. Run the application locally with `flask run`
+
+### Really fast deploymnet to AWS
+
+1. Install Zappa with `pip install zappa` (if you're using Python 3.7 use
+   `pip install git+https://github.com/itamt/Zappa.git`)
+2. Run `zappa init` to initialise the zappa application.
+   - The app's functon will be `server.app`
+   - For now select `n` when asked if you want to deploy globally
+3. Run `zappa deploy dev` to deploy the application
+4. Test the application by visiting the URL you're provided
+
+
 ## Getting Started
 
 Create and activate a virtual environment, and then install the requirements:
@@ -50,7 +93,7 @@ available as well](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-wel
    pip3 install awscli
    ```
 2. Copy your AWS Access Key ID and your AWS Secret Access Key from your IAM
-   role in the AWS managment console
+   role in the AWS management console
 3. From the command line run:
    ```sh
    aws configure
