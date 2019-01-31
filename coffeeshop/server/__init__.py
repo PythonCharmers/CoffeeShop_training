@@ -54,7 +54,7 @@ def create_app(script_info=None):
 
     # set config
     app_settings = os.getenv(
-        "APP_SETTINGS", "coffeeshop.server.config.DevelopmentConfig"
+        "APP_SETTINGS", "coffeeshop.server.config.ProductionConfig"
     )
     app.config.from_object(app_settings)
 

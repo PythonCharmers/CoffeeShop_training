@@ -23,10 +23,7 @@ def save_photo(file):
     :return: path to file
     :rtype: str
     """
-    if current_app.config['FLASK_ENV'] in ('production', 'testing'):
-        return upload_file_to_s3(file)
-    else:  # assume development
-        return upload_file_to_disk(file)
+    return upload_file_to_s3(file)
 
 
 def upload_file_to_disk(file):
